@@ -9,7 +9,7 @@ router.post(
   async (req, res) => Register(req, res)
 );
 
-router.get(
+router.post(
   "/login",
   async (req, res, next) => AppToken(req, res, next),
   async (req, res) => Login(req, res)

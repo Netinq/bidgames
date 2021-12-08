@@ -5,9 +5,11 @@ const {
   Show,
   Update,
   Destroy,
+  SellItem,
+  MakeOffer,
   AddFavorite,
   All,
-} = require("../api/controllers/SalesController");
+} = require("../api/controllers/ItemController");
 const AppToken = require("../api/middlewares/AppToken");
 const UserToken = require("../api/middlewares/UserToken");
 const RoleMiddleware = require("../api/middlewares/RoleMiddleware");
@@ -20,36 +22,46 @@ router.get(
   async (req, res) => All(req, res)
 );
 router.post(
-  "/",
+  "/sell",
   async (req, res, next) => AppToken(req, res, next),
   async (req, res, next) => UserToken(req, res, next),
   async (req, res, next) => RoleMiddleware(req, res, next, 1000),
+  async (req, res) => SellItem(req, res)
+);
+router.post(
+  "/makeoffer",
+  async (req, res, next) => AppToken(req, res, next),
+  async (req, res, next) => UserToken(req, res, next),
+  async (req, res) => MakeOffer(req, res)
+);
+router.post(
+  "/",
+  async (req, res, next) => AppToken(req, res, next),
+  async (req, res, next) => UserToken(req, res, next),
   async (req, res) => Store(req, res)
 );
 router.post(
-  "/:uuid/fav",
+  "/:id/fav",
   async (req, res, next) => AppToken(req, res, next),
   async (req, res, next) => UserToken(req, res, next),
   async (req, res) => AddFavorite(req, res)
 );
 router.get(
-  "/:uuid",
+  "/:id",
   async (req, res, next) => AppToken(req, res, next),
   async (req, res, next) => UserToken(req, res, next),
   async (req, res) => Show(req, res)
 );
 router.post(
-  "/:uuid",
+  "/:id",
   async (req, res, next) => AppToken(req, res, next),
   async (req, res, next) => UserToken(req, res, next),
-  async (req, res, next) => RoleMiddleware(req, res, next, 1000),
   async (req, res) => Update(req, res)
 );
 router.delete(
-  "/:uuid",
+  "/:id",
   async (req, res, next) => AppToken(req, res, next),
   async (req, res, next) => UserToken(req, res, next),
-  async (req, res, next) => RoleMiddleware(req, res, next, 1000),
   async (req, res) => Destroy(req, res)
 );
 

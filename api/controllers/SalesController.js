@@ -1,9 +1,11 @@
 const Sale = require("../../database/models/Sale");
 const User = require("../../database/models/User");
+const Favorite = require("../../database/models/FavoriteSale");
 const ErrorMessage = require("../errors/ErrorMessage");
 const ErrorMessageValidator = require("../errors/ErrorMessageValidator");
 const ValidatorStore = require("../validators/sales/Store");
 const ValidatorUpdate = require("../validators/sales/Update");
+const SaleProvider = require("../providers/SaleProvider");
 
 async function Store(req, res) {
   const { error } = ValidatorStore.validate(req.body);
@@ -30,8 +32,9 @@ async function Update(req, res) {
   const { error } = ValidatorUpdate.validate(req.body);
   if (error) return new ErrorMessageValidator(error).send(res);
 
-  const sale = await Sale.findOne({ where: { sale_uuid: req.params.uuid } });
-  if (sale == null) return new ErrorMessage("Objet introuvable").send(res);
+  const sale = await SaleProvider.Exist(req.params.uuid).catch((error) =>
+    error.send(res)
+  );
 
   if (req.body.user_uuid) {
     const user = await User.findOne({
@@ -53,8 +56,9 @@ async function Update(req, res) {
   });
 }
 async function Destroy(req, res) {
-  const sale = await Sale.findOne({ where: { sale_uuid: req.params.uuid } });
-  if (sale == null) return new ErrorMessage("Objet introuvable").send(res);
+  const sale = await SaleProvider.Exist(req.params.uuid).catch((error) =>
+    error.send(res)
+  );
 
   await sale.destroy();
 
@@ -62,12 +66,45 @@ async function Destroy(req, res) {
 }
 
 async function Show(req, res) {
-  const sale = await Sale.findOne({ where: { sale_uuid: req.params.uuid } });
-  if (sale == null) return new ErrorMessage("Objet introuvable").send(res);
+  const sale = await SaleProvider.Exist(req.params.uuid).catch((error) =>
+    error.send(res)
+  );
 
   const user = await User.findOne({ where: { user_uuid: sale.user_uuid } });
 
   return res.json({ sale: sale, auctioneer: user });
+}
+
+async function AddFavorite(req, res) {
+  const sale = await SaleProvider.Exist(req.params.uuid).catch((error) =>
+    error.send(res)
+  );
+
+  if (
+    await Favorite.findOne({
+      where: {
+        sale_uuid: sale.sale_uuid,
+        user_uuid: req.user.user_uuid,
+      },
+    })
+  )
+    return new ErrorMessage("Déjà en favoris").send(res);
+
+  const favorite = new Favorite({
+    sale_uuid: sale.sale_uuid,
+    user_uuid: req.user.user_uuid,
+  });
+
+  await favorite.save();
+
+  return res.json({
+    success: "Ajouté au(x) favori(s) !",
+  });
+}
+
+async function All(req, res) {
+  const sales = await Sale.findAll({ attributes: { exclude: ["user_uuid"] } });
+  res.json(sales);
 }
 
 module.exports = {
@@ -75,4 +112,6 @@ module.exports = {
   Update,
   Destroy,
   Show,
+  AddFavorite,
+  All,
 };

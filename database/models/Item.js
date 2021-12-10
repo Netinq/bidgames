@@ -22,7 +22,7 @@ Item.init(
   },
   {
     sequelize: sequelize,
-    modelName: "Item",
+    modelName: "item",
     timestamps: false,
   }
 );

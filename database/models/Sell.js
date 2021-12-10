@@ -15,8 +15,8 @@ Sell.init(
   },
   {
     sequelize: sequelize,
-    modelName: "Sell",
-    tableName: "Sell",
+    modelName: "sell",
+    tableName: "sell",
     timestamps: false,
   }
 );

@@ -17,7 +17,7 @@ Sale.init(
   },
   {
     sequelize: sequelize,
-    modelName: "Sale",
+    modelName: "sale",
     timestamps: false,
     defaultScope: {
       attributes: { exclude: ["password"] },

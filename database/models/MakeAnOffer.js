@@ -20,8 +20,8 @@ MakeAnOffer.init(
   },
   {
     sequelize: sequelize,
-    modelName: "Make_An_Offer",
-    tableName: "Make_An_Offer",
+    modelName: "make_an_offer",
+    tableName: "make_an_offer",
     timestamps: false,
   }
 );

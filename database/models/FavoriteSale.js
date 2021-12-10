@@ -16,7 +16,7 @@ FavoriteSale.init(
   },
   {
     sequelize: sequelize,
-    modelName: "Favorite_Sale",
+    modelName: "favorite_sale",
     timestamps: false,
   }
 );

@@ -11,7 +11,7 @@ const schema = Joi.object({
     "any.empty": `Le champ ne peut pas être vide`,
     "any.required": `Le champ est requis`,
   }),
-  virtual: Joi.boolean().required().empty().messages({
+  isvirtual: Joi.boolean().required().empty().messages({
     "any.base": `Le champ est invalide`,
     "any.empty": `Le champ ne peut pas être vide`,
     "any.required": `Le champ est requis`,

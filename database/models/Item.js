@@ -11,7 +11,7 @@ Item.init(
     },
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
-    virtual: DataTypes.BOOLEAN,
+    isvirtual: DataTypes.BOOLEAN,
     min_age: DataTypes.SMALLINT,
     price: DataTypes.INTEGER,
     sold: DataTypes.BOOLEAN,

@@ -21,6 +21,9 @@ async function Register(req, res) {
   const HashPassword = await BCRYPT.hash(req.body.password, SALT);
   const role = await Role.findOne({ where: { access_level: 0 } });
 
+  console.log("TEST");
+  console.log(role);
+
   const user = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
